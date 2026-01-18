@@ -1,0 +1,406 @@
+@font-face {
+    font-family: 'Cairo';
+    src: url('Cairo-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to bottom, #00a6b6, #c9da37);
+    padding: 10px;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    height: calc(100vh - 20px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    min-height: 0;
+}
+
+.game-frame {
+    width: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-content {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(10px, 2vh, 20px);
+    min-height: 0;
+}
+
+.game-title {
+    font-size: clamp(2rem, 4vw, 4rem);
+    font-weight: 700;
+    color: #000;
+    text-align: center;
+    margin-bottom: 0;
+    font-family: 'Cairo', sans-serif;
+    line-height: 1.1;
+    flex-shrink: 0;
+}
+
+.game-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    font-size: clamp(1rem, 2vw, 1.8rem);
+    font-weight: 600;
+    color: #000;
+    font-family: 'Cairo', sans-serif;
+    flex-shrink: 0;
+}
+
+.current-player {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#player-indicator {
+    font-size: 2.5rem;
+    animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: clamp(6px, 1vw, 10px);
+    width: clamp(280px, 40vw, 450px);
+    height: clamp(280px, 40vw, 450px);
+    max-width: 100%;
+    max-height: 100%;
+    background: #000;
+    padding: clamp(6px, 1vw, 10px);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+}
+
+.cell {
+    background: #f8f9fa;
+    border: 3px solid #e0e0e0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(3rem, 8vw, 5rem);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+    min-height: 0;
+    min-width: 0;
+    aspect-ratio: 1;
+    position: relative;
+}
+
+.cell-number {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    color: rgba(0, 0, 0, 0.25);
+    font-weight: 600;
+    pointer-events: none;
+    z-index: 1;
+    font-family: 'Cairo', sans-serif;
+}
+
+.cell:hover:not(.filled) {
+    background: #e9ecef;
+    border-color: #00a6b6;
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 166, 182, 0.3);
+}
+
+.cell.filled {
+    cursor: default;
+}
+
+.cell.winner {
+    background: #c9da37;
+    border-color: #c9da37;
+    animation: winnerPulse 0.6s ease-in-out 3;
+}
+
+@keyframes winnerPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.game-status {
+    font-size: clamp(1.2rem, 2.5vw, 2rem);
+    font-weight: 700;
+    color: #000;
+    text-align: center;
+    min-height: clamp(24px, 3vh, 40px);
+    font-family: 'Cairo', sans-serif;
+    flex-shrink: 0;
+}
+
+.game-status.win-message {
+    color: #c9da37;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.game-status.draw-message {
+    color: #666;
+}
+
+.reset-btn {
+    padding: clamp(10px, 1.5vh, 15px) clamp(30px, 4vw, 40px);
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-weight: 700;
+    color: #000;
+    background: #f8f9fa;
+    border: 3px solid #000;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Cairo', sans-serif;
+    display: none;
+    flex-shrink: 0;
+}
+
+.reset-btn:hover {
+    background: #e9ecef;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.reset-btn:active {
+    transform: translateY(0);
+}
+
+.logo {
+    text-align: center;
+    margin-top: clamp(5px, 1vh, 10px);
+    flex-shrink: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+}
+
+.logo img {
+    height: clamp(100px, 15vh, 200px);
+    width: auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Fullscreen sting animation */
+.fullscreen-sting {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to bottom, #00a6b6, #c9da37);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+}
+
+.sting-reset-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: clamp(10px, 1.5vh, 15px) clamp(30px, 4vw, 40px);
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-weight: 700;
+    color: #000;
+    background: rgba(248, 249, 250, 0.9);
+    border: 3px solid #000;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Cairo', sans-serif;
+    z-index: 1001;
+    backdrop-filter: blur(5px);
+}
+
+.sting-reset-btn:hover {
+    background: rgba(248, 249, 250, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.sting-reset-btn:active {
+    transform: translateY(0);
+}
+
+.fullscreen-sting.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    animation: stingEntry 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes stingEntry {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.sting-content {
+    text-align: center;
+    animation: stingContentEntry 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+}
+
+@keyframes stingContentEntry {
+    0% {
+        transform: translateY(50px) scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+.sting-emoji {
+    font-size: 12rem;
+    margin-bottom: 30px;
+    animation: stingEmojiBounce 1s ease-in-out 0.8s infinite;
+    line-height: 1;
+}
+
+@keyframes stingEmojiBounce {
+    0%, 100% {
+        transform: scale(1) translateY(0);
+    }
+    50% {
+        transform: scale(1.1) translateY(-10px);
+    }
+}
+
+.sting-message {
+    font-size: 5rem;
+    font-weight: 700;
+    color: #000;
+    font-family: 'Cairo', sans-serif;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+    animation: stingMessagePulse 2s ease-in-out infinite;
+}
+
+@keyframes stingMessagePulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .game-title {
+        font-size: 2.5rem;
+    }
+    
+    .game-info {
+        font-size: 1.3rem;
+    }
+    
+    #player-indicator {
+        font-size: 2rem;
+    }
+    
+    .board {
+        width: 300px;
+        height: 300px;
+        gap: 8px;
+        padding: 8px;
+    }
+    
+    .cell {
+        font-size: 3.5rem;
+    }
+    
+    .game-status {
+        font-size: 1.5rem;
+    }
+    
+    .reset-btn {
+        padding: 12px 30px;
+        font-size: 1.2rem;
+    }
+    
+    .logo img {
+        height: 180px;
+        max-width: 500px;
+    }
+    
+    .sting-emoji {
+        font-size: 8rem;
+        margin-bottom: 20px;
+    }
+    
+    .sting-message {
+        font-size: 3rem;
+    }
+}
